@@ -1,0 +1,16 @@
+version: '3'
+services:
+  http:
+      build:
+          context: .
+          dockerfile: Dockerfile-nginx
+      ports:
+          - "80"
+      depends_on:
+          - php
+      volumes:
+          - ./html:/var/www/html
+  php:
+      image: php:7-fpm-alpine
+      volumes:
+          - ./html:/var/www/html

@@ -1,0 +1,23 @@
+FROM nginx:mainline-alpine
+MAINTAINER h-mineta <h-mineta@0nyx.net>
+
+RUN set -x \
+	&& apk upgrade --update \
+	&& apk add \
+		bash \
+		ca-certificates \
+		wget \
+		unzip \
+	&& mkdir -p /var/www/html \
+	&& cd /var/www \
+	&& wget http://install.speedtest.net/httplegacy/http_legacy_fallback.zip \
+	&& unzip http_legacy_fallback.zip \
+	&& rm -f http_legacy_fallback.zip \
+	&& rm -f speedtest/upload.asp \
+	&& rm -f speedtest/upload.aspx \
+	&& rm -f speedtest/upload.jsp \
+	&& mv speedtest html \
+	&& chown nginx:nginx -R html
+
+WORKDIR /var/www/html
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
